@@ -13,17 +13,13 @@ class CalculateMyNeeds extends StatefulWidget {
 }
 bool _connected = false;
 Map<String, double> needs = new Map();
+List<Needs> needsTab = <Needs>[];
 double _calories = 250;
 double _protein = 150;
 double _fats = 50;
 double _carbohydrates = 100;
 
 
-Needs cal = new Needs(type: "Calories", amount: _calories);
-Needs pro = new Needs(type: "Protein", amount: _protein);
-Needs fat = new Needs(type: "Fats", amount: _fats);
-Needs car = new Needs(type: "Carbs", amount: _carbohydrates);
-final List<Needs> needsTab = [cal,pro,fat,car];
 
 class CalculateMyNeedsState extends State<CalculateMyNeeds> {
   List<Color> colorList = [
@@ -40,6 +36,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
     needs.putIfAbsent("Protein", () => _protein);
     needs.putIfAbsent("Fats", () => _fats);
     needs.putIfAbsent("Carbs", () => _carbohydrates);
+    needsTab = _calculateMyNeeds("Male", 72, 183, 23, "Active", "Bulk");
   }
 
   @override
@@ -141,7 +138,7 @@ List<Needs> _calculateMyNeeds(String sexe, int weight, int height, int age, Stri
     double resultCalories;
     double resultProtein;
     double resultFats;
-    double resultCarbs;
+    double resultCar;
     if(sexe == "Male"){
       bmr = 10 * weight + 6.25 * height - 5 * age + 5;
     }
@@ -160,21 +157,21 @@ List<Needs> _calculateMyNeeds(String sexe, int weight, int height, int age, Stri
     }
     resultProtein = (weight * 2) as double;
     switch(goal){
-      case "Lose Weight" : resultFats = 0.7 * weight; resultCalories = resultBMR - 0.15 * resultBMR; resultCarbs = ((resultProtein * 4) + (resultFats * 9) - resultCalories)/4;
+      case "Lose Weight" : resultFats = 0.7 * weight; resultCalories = resultBMR - 0.15 * resultBMR; resultCar = ((resultProtein * 4) + (resultFats * 9) - resultCalories)/4;
       break;
-      case "Maintain Weight" : resultFats = 0.7 * weight; resultCalories = resultBMR; resultCarbs = ((resultProtein * 4) + (resultFats * 9) - resultCalories);
+      case "Maintain Weight" : resultFats = 0.7 * weight; resultCalories = resultBMR; resultCar = ((resultProtein * 4) + (resultFats * 9) - resultCalories);
       break;
-      case "Bulk" : resultFats = 0.7 * weight; resultCalories = resultBMR + 0.15 * resultBMR; resultCarbs = ((resultProtein * 4) + (resultFats * 9) - resultCalories)*4;
+      case "Bulk" : resultFats = 0.7 * weight; resultCalories = resultBMR + 0.15 * resultBMR; resultCar = ((resultProtein * 4) + (resultFats * 9) - resultCalories)*4;
       break;
     }
 
 
-    Needs cal = new Needs(type: "Calories", amount: _calories);
-    Needs pro = new Needs(type: "Protein", amount: _protein);
-    Needs fat = new Needs(type: "Fats", amount: _fats);
-    Needs car = new Needs(type: "Carbs", amount: _carbohydrates);
-    final List<Needs> needsTab = [cal,pro,fat,car];
-    return needsTab;
+    Needs cal = new Needs(type: "Calories", amount: resultCalories);
+    Needs pro = new Needs(type: "Protein", amount: resultProtein);
+    Needs fat = new Needs(type: "Fats", amount: resultFats);
+    Needs car = new Needs(type: "Carbs", amount: resultCar);
+    final List<Needs> needsCalculated = [cal,pro,fat,car];
+    return needsCalculated;
 }
 
 }
