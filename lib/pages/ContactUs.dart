@@ -1,9 +1,15 @@
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 class ContactUs extends StatefulWidget {
+  final bool connected;
+
+  const ContactUs({
+    Key key,
+    @required this.connected,
+  }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
     return ContactUsState();
@@ -23,8 +29,8 @@ class ContactUsState extends State<ContactUs>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context),
-      drawer: drawer(context),
+      appBar: myAppBar(context,widget.connected),
+      drawer: drawer(context,widget.connected),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -32,19 +38,22 @@ class ContactUsState extends State<ContactUs>{
               Padding(
                 padding: const EdgeInsets.only(top: 20.0, bottom: 15.0),
                 child: Text(
-                  'Get in Touch',
+                  'Contacter nous',
                   style: TextStyle(
                     fontFamily: 'Bebas',
-                    fontSize: 45,
+                    fontSize: 35,
                     color: Theme.of(context).accentColor,
                   ),
                 ),
               ),
-              Text(
-                'Feel free to tell us anything',
-                style: TextStyle(
-                  fontFamily: 'poppins',
-                  fontSize: 15,
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  'Si vous avez des questions ou si vous voulez réclamer à une problème, n\'hésitez pas à nous laisser un message.',
+                  style: TextStyle(
+                    fontFamily: 'poppins',
+                    fontSize: 15,
+                  ),
                 ),
               ),
               Padding(
@@ -65,9 +74,7 @@ class ContactUsState extends State<ContactUs>{
                     bottom: 10.0,
                     left: MediaQuery.of(context).size.width * 0.55),
                 child: MaterialButton(
-                  onPressed: () {
-                    _sendEmail('kool.healthy.contact@gmail.com', 'Contact Message ${DateTime.now()}', '${descriptionController.text}');
-                  },
+                  onPressed: () {},
                   minWidth: 70.0,
                   height: 50,
                   child: Text(
@@ -82,23 +89,6 @@ class ContactUsState extends State<ContactUs>{
         ),
       ),
     );
-  }
-
-  _sendEmail(String toMailId, String subject, String body) async{
-    var url = 'mailto:$toMailId?subject=$subject&body=$body';
-    AlertDialog alertDialog = AlertDialog(
-      title: Text('EmailSender'),
-      content: Text('Check your E-mail'),
-    );
-    if (await canLaunch(url)) {
-      await launch(url);
-      showDialog(
-          context: context,
-          builder: (_) => alertDialog
-      );
-    } else {
-      throw 'Could not launch $url';
-    }
   }
 
 }

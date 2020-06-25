@@ -1,4 +1,8 @@
 
+import 'package:koolhealthymobile/pages/MenuFruitsDeMer.dart';
+import 'package:koolhealthymobile/pages/MenuPoulet.dart';
+import 'package:koolhealthymobile/pages/MenuVegan.dart';
+
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -7,17 +11,25 @@ import '../drawer.dart';
 
 
 class PreparedMeals extends StatefulWidget {
+  final bool connected;
+
+  const PreparedMeals({
+    Key key,
+    @required this.connected,
+  }) : super(key: key);
+
   @override
   _PreparedMealsState createState() => _PreparedMealsState();
 }
 
 class _PreparedMealsState extends State<PreparedMeals> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar(context),
-      drawer: drawer(context),
+      appBar: myAppBar(context, widget.connected),
+      drawer: drawer(context, widget.connected),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(25, 30, 25, 25),
@@ -43,135 +55,19 @@ class _PreparedMealsState extends State<PreparedMeals> {
                 Padding(
                   padding: EdgeInsets.only(top: 30),
                 ),
-                Text(
-                  'Get Your Favorite Healthy Meal',
-                  style: TextStyle(
-                    color: Theme.of(context).primaryColor,
-                    fontSize: 25,
-                    fontFamily: 'Bebas',
-                    fontWeight: FontWeight.bold,
+                Center(
+                  child: Text(
+                    'Vous trouverez ici notre menu des repas préparés',
+                    style: TextStyle(
+                      color: Theme.of(context).accentColor,
+                      fontSize: 18,
+                      fontFamily: 'Bebas',
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 15),
-                ),
-                Divider(
-                  height: 25,
-                  color: Colors.grey[300],
-                ),
-                Container(
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'PRICE',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '10',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Theme.of(context).accentColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' DT',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'CALORIES',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '259',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Theme.of(context).accentColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' Kcal',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Text(
-                              'Protein',
-                              style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            RichText(
-                              text: TextSpan(
-                                children: [
-                                  TextSpan(
-                                    text: '150',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Theme.of(context).accentColor,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  TextSpan(
-                                    text: ' g',
-                                    style: TextStyle(
-                                      color: Colors.grey,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
                 ),
                 Divider(
                   height: 25,
@@ -192,7 +88,7 @@ class _PreparedMealsState extends State<PreparedMeals> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Icon(Icons.arrow_drop_down, color: Theme.of(context).accentColor,)
+                    Icon(Icons.business_center, color: Theme.of(context).accentColor,)
                   ],
                 ),
                 Container(
@@ -204,28 +100,25 @@ class _PreparedMealsState extends State<PreparedMeals> {
                     scrollDirection: Axis.horizontal,
                     children: <Widget>[
                       StatCard(
-                        title: 'Meat',
-                        //achieved: 200,
-                        //total: 350,
-                        type: 'Meat Based Meal',
-                        color: Colors.orange,
+                        title: 'Poulet',
+                        type: 'Repas à base poulet',
+                        color: Color(0XFFad4d01),
                         image: Image.asset('assets/img/bolt.png', width: 20),
+                        connected: widget.connected,
                       ),
                       StatCard(
-                        title: 'Fish',
-                        type: 'Fish Based Meal',
-                        //achieved: 350,
-                        //total: 300,
-                        color: Theme.of(context).primaryColor,
+                        title: 'Fruits de mer',
+                        type: 'Repas à base fruits de mer',
+                        color: Colors.deepPurple,
                         image: Image.asset('assets/img/fish.png', width: 20),
+                        connected: widget.connected,
                       ),
                       StatCard(
-                        title: 'Vegan',
-                        type: 'Vegan Based Meal',
-                        //achieved: 100,
-                        //total: 200,
+                        title: 'Végétarien',
+                        type: 'Repas végétariens',
                         color: Colors.green,
                         image: Image.asset('assets/img/sausage.png', width: 20),
+                        connected: widget.connected,
                       ),
                     ],
                   ),
@@ -246,6 +139,7 @@ class StatCard extends StatelessWidget {
   //final double achieved;
   final Image image;
   final Color color;
+  final bool connected;
 
   const StatCard({
     Key key,
@@ -255,6 +149,7 @@ class StatCard extends StatelessWidget {
     //@required this.achieved,
     @required this.image,
     @required this.color,
+    @required this.connected,
   }) : super(key: key);
 
   @override
@@ -262,6 +157,32 @@ class StatCard extends StatelessWidget {
     return GestureDetector(
       onTap: (){
         print('$type pressed');
+        if(type == 'Repas à base poulet'){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MenuPoulet(connected: connected),
+            ),
+          );
+        }
+        if(type == 'Repas à base fruits de mer'){
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => MenuFruitsDeMer(connected: connected),
+              ),
+            );
+
+        }
+        if(type == 'Repas végétariens'){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MenuVegan(connected: connected),
+            ),
+          );
+
+        }
       },
       child: Container(
         width: 200,

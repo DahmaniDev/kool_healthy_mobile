@@ -4,11 +4,19 @@ import 'package:flutter/material.dart';
 import '../drawer.dart';
 
 class Home extends StatelessWidget {
+
+  final bool connected;
+
+  const Home({
+    Key key,
+    @required this.connected,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: myAppBar(context),
-        drawer: drawer(context),
+        appBar: myAppBar(context, connected),
+        drawer: drawer(context, connected),
         body: SingleChildScrollView(
           child: Container(
             child: Column(
@@ -22,15 +30,20 @@ class Home extends StatelessWidget {
                       onPressed: (){
                         Navigator.push(context,  MaterialPageRoute(builder: (context){
                           return ArticleInt(
-                            title: 'What We Do ?',
-                            description: 'It\'s a service that calculates your caloric needs, we match that with your food preferences that you pick and then we prepare and deliver your healthy and balanced meal(s).',
+                            title: 'Que faisons-nous ?',
+                            description: 'C\'est un service qui calcule vos besoins caloriques, nous l\'adaptons à vos préférences alimentaires que vous choisissez et ensuite nous préparons et livrons vos repas sains et équilibrés.',
+                            connected: connected,
+                            image: Image.asset(
+                              'assets/img/logo.png',
+                              width: 300,
+                            ),
                           );
                         }));
                       },
                       minWidth: double.infinity,
                       height: 150,
                       child: Text(
-                        'What we do ?'.toUpperCase(),
+                        'Que faisons-nous ?'.toUpperCase(),
                       ),
                     )
                 ),
@@ -43,15 +56,20 @@ class Home extends StatelessWidget {
                       onPressed: (){
                         Navigator.push(context,  MaterialPageRoute(builder: (context){
                           return ArticleInt(
-                            title: 'How Does It Work ?',
-                            description: '1 - We calculate your needs\n2 - You choose your food ingredients and confirm your order\n3 - We prepare it and deliver it to you',
+                            title: 'Comment ça marche?',
+                            description: '1- Nous calculons vos besoins \n2- Vous choisissez votre repas désiré et confirmez votre commande \n3- Nous préparons votre repas et nous vous livrons à domicile',
+                            connected: connected,
+                            image: Image.asset(
+                              'assets/img/logo.png',
+                              width: 300,
+                            ),
                           );
                         }));
                       },
                       minWidth: double.infinity,
                       height: 150,
                       child: Text(
-                        'How does it work ?'.toUpperCase(),
+                        'Comment ça marche?'.toUpperCase(),
                       ),
                     )
                 ),
@@ -64,15 +82,20 @@ class Home extends StatelessWidget {
                       onPressed: (){
                         Navigator.push(context,  MaterialPageRoute(builder: (context){
                           return ArticleInt(
-                            title: 'What\'s our goal ?',
-                            description: 'To help people prepare their healthy meals while they\'re busy at work, school or anywhere. We also make people more aware about their bosies and what they actually need in their Meals, Nutritional awareness is the key to a healthy life.',
+                            title: 'Quel est notre objectif?',
+                            description: 'Aidez les gens à préparer leurs repas sains lorsqu\'ils sont occupés au travail, à l\'école ou n\'importe où.',
+                            connected: connected,
+                            image: Image.asset(
+                              'assets/img/logo.png',
+                              width: 300,
+                            ),
                           );
                         }));
                       },
                       minWidth: double.infinity,
                       height: 150,
                       child: Text(
-                        'what\'s our goal ?'.toUpperCase(),
+                        'Quel est notre objectif?'.toUpperCase(),
                       ),
                     )
                 ),

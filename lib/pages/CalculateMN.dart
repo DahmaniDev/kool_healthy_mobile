@@ -1,4 +1,4 @@
-import 'package:koolhealthymobile/pages/Menu.dart';
+import 'package:koolhealthymobile/pages/MenuPoulet.dart';
 
 import '../appbar.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +6,13 @@ import '../drawer.dart';
 import 'package:pie_chart/pie_chart.dart';
 
 class CalculateMyNeeds extends StatefulWidget {
+  final bool connected;
+
+  const CalculateMyNeeds({
+    Key key,
+    @required this.connected,
+  }) : super(key: key);
+
   @override
   State<StatefulWidget> createState() {
     return CalculateMyNeedsState();
@@ -36,14 +43,14 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
     needs.putIfAbsent("Protein", () => _protein);
     needs.putIfAbsent("Fats", () => _fats);
     needs.putIfAbsent("Carbs", () => _carbohydrates);
-    needsTab = _calculateMyNeeds("Male", 72, 183, 23, "Active", "Bulk");
+    needsTab = _calculateMyNeeds("Male", 72.0, 183.0, 23, "Active", "Bulk");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: myAppBar(context),
-        drawer: drawer(context),
+        appBar: myAppBar(context,widget.connected),
+        drawer: drawer(context, widget.connected),
         body: _connected
         ?SingleChildScrollView(
           child: Container(
@@ -116,7 +123,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                   child: MaterialButton(
                     onPressed: () {
                       Navigator.of(context).push((MaterialPageRoute(
-                          builder: (context) => Menu(caloriesValue: _calories,carbohydratesValue: _carbohydrates, fatsValue: _fats, proteinValue: _protein)
+                          builder: (context) => MenuPoulet(connected: widget.connected,)
                       )));
                     },
                     minWidth: 70.0,
@@ -124,7 +131,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                     child: Text(
                       'Prepare My Meal'.toUpperCase(),
                     ),
-                    color: Theme.of(context).buttonColor,
+                    color: Colors.deepPurple,
                     textColor: Colors.white,
                   ),
                 )
@@ -132,7 +139,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
             )));
   }
 
-List<Needs> _calculateMyNeeds(String sexe, int weight, int height, int age, String activityLevel, String goal){
+List<Needs> _calculateMyNeeds(String sexe, double weight, double height, int age, String activityLevel, String goal){
     double bmr;
     double resultBMR;
     double resultCalories;
@@ -148,14 +155,14 @@ List<Needs> _calculateMyNeeds(String sexe, int weight, int height, int age, Stri
     switch(activityLevel){
       case "Non Active" : resultBMR = 1.2 * bmr;
       break;
-      case "Little Active" : resultBMR = 1.2 * bmr;
+      case "Little Active" : resultBMR = 1.4 * bmr;
       break;
-      case "Active" : resultBMR = 1.2 * bmr;
+      case "Active" : resultBMR = 1.6 * bmr;
       break;
-      case "Super Active" : resultBMR = 1.2 * bmr;
+      case "Super Active" : resultBMR = 1.9 * bmr;
       break;
     }
-    resultProtein = (weight * 2) as double;
+    resultProtein = (weight * 2);
     switch(goal){
       case "Lose Weight" : resultFats = 0.7 * weight; resultCalories = resultBMR - 0.15 * resultBMR; resultCar = ((resultProtein * 4) + (resultFats * 9) - resultCalories)/4;
       break;

@@ -1,3 +1,4 @@
+import 'SignIn.dart';
 import 'Home.dart';
 import 'package:flutter/material.dart';
 
@@ -39,7 +40,7 @@ class _WelcomeState extends State<Welcome> {
                   padding: EdgeInsets.only(top: 30),
                 ),
                 Text(
-                  'Prepare your meal according to your nutrition needs, well cooked, well calculated and most importantly...Healthy',
+                  'Préparez votre repas en fonction de vos besoins nutritionnels, bien cuit, bien calculé et surtout ... Sain',
                   style: TextStyle(
                     color: Colors.black87,
                   ),
@@ -53,14 +54,14 @@ class _WelcomeState extends State<Welcome> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Home(),
+                        builder: (context) => Home(connected: false),
                       ),
                     );
                   },
                   minWidth: double.infinity,
                   height: 50,
                   child: Text(
-                    'Get Started'.toUpperCase(),
+                    'Explorer'.toUpperCase(),
                   ),
                   color: Theme.of(context).buttonColor,
                   textColor: Colors.white,
@@ -69,12 +70,19 @@ class _WelcomeState extends State<Welcome> {
                   padding: EdgeInsets.only(top: 10),
                 ),
                 MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignIn(),
+                      ),
+                    );
+                  },
                   minWidth: double.infinity,
                   height: 50,
                   textColor: Theme.of(context).buttonColor,
                   child: Text(
-                    'Sign In'.toUpperCase(),
+                    'S\'authentifier'.toUpperCase(),
                   ),
                 ),
               ],

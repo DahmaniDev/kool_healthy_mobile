@@ -1,9 +1,14 @@
-import '../ArticleInt.dart';
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
 
 class Partnership extends StatefulWidget {
+  final bool connected;
+
+  const Partnership({
+    Key key,
+    @required this.connected,
+  }) : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
@@ -14,6 +19,8 @@ class Partnership extends StatefulWidget {
 class PartnershipState extends State<Partnership>{
 
   int _radioValue = -1;
+  TextEditingController emailC = new TextEditingController();
+  TextEditingController nomC = new TextEditingController();
 
   void handleRadioChange(int value){
     setState(() {
@@ -24,38 +31,22 @@ class PartnershipState extends State<Partnership>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context),
-      drawer: drawer(context),
+      appBar: myAppBar(context, widget.connected),
+      drawer: drawer(context, widget.connected),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 20.0, bottom: 15.0),
+                padding: const EdgeInsets.only(top: 30.0, bottom: 15.0),
                 child: Text(
-                  'Become a partner',
+                  'Devenir un partenaire',
                   style: TextStyle(
                     fontFamily: 'Bebas',
-                    fontSize: 45,
+                    fontSize: 35,
                     color: Theme.of(context).accentColor,
                   ),
                 ),
-              ),
-              InkWell(
-                child: Text(
-                  'Terms and Conditions',
-                  style: TextStyle(
-                      fontFamily: 'poppins',
-                      fontSize: 15,
-                      color: Colors.lightBlueAccent
-                  ),
-                ),
-                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ArticleInt(
-                    title: 'Terms And Conditions',
-                    description: returnTerms(),
-                  );
-                })),
               ),
               Padding(
                 padding: EdgeInsets.only(top: 20, bottom: 10),
@@ -66,6 +57,7 @@ class PartnershipState extends State<Partnership>{
                 child: TextField(
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(labelText: 'E-mail'),
+                  controller: emailC,
                 ),
               ),
               Padding(
@@ -75,10 +67,12 @@ class PartnershipState extends State<Partnership>{
                 height: 80,
                 width: 250,
                 child: TextField(
-                    decoration: InputDecoration(labelText: 'Company Name')),
+                    decoration: InputDecoration(labelText: 'Nom du restaurant'),
+                    controller: nomC,
+                ),
               ),
               Text(
-                'You are :',
+                'Vous êtes :',
                 style: TextStyle(
                   fontFamily: 'poppins',
                   fontSize: 15,
@@ -104,7 +98,7 @@ class PartnershipState extends State<Partnership>{
                     onChanged: handleRadioChange,
                   ),
                   Text(
-                      'Food Caterer'
+                      'Traiteur'
                   )
                 ],
               ),
@@ -117,7 +111,7 @@ class PartnershipState extends State<Partnership>{
                   minWidth: 70.0,
                   height: 50,
                   child: Text(
-                    'Submit'.toUpperCase(),
+                    'Envoyer'.toUpperCase(),
                   ),
                   color: Theme.of(context).buttonColor,
                   textColor: Colors.white,

@@ -9,13 +9,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Fitness App',
+      title: 'Kool Healthy',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        primaryColor: Color(0XFF21D91E),
+        primaryColor: Color(0XFFd65106),
         //backgroundColor: Color(0XFF),
-        accentColor: Color(0XFF1695b5), //Title Color
-        buttonColor: Color(0XFF0390FC),
+        accentColor: Color(0XFF222222), //Title Color
+        buttonColor: Color(0XFFd65106),
         fontFamily: 'Poppins',
       ),
       home: Welcome(),

@@ -5,22 +5,30 @@ import 'package:flutter/material.dart';
 class ArticleInt extends StatelessWidget {
   final String title;
   final String description;
+  final Image image;
+  final bool connected;
 
   const ArticleInt({
     Key key,
     @required this.title,
     @required this.description,
+    @required this.image,
+    @required this.connected,
   }) : super(key: key);
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: myAppBar(context),
-        drawer: drawer(context),
+        appBar: myAppBar(context, connected),
+        drawer: drawer(context, connected),
         body: SingleChildScrollView(
           child: Column(
             children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(bottom: 20.0),
+              ),
+              this.image,
               Padding(
                 padding: EdgeInsets.only(bottom: 20.0),
               ),
