@@ -1,3 +1,4 @@
+import 'models/User.dart';
 import 'pages/Partnership.dart';
 import 'pages/Advices.dart';
 import 'pages/ContactUs.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'pages/CalculateMN.dart';
 import 'pages/Home.dart';
 
-Widget drawer(context, bool connected) {
+Widget drawer(context, bool connected, User user) {
   return Drawer(
     elevation: 1.0,
     child: ListView(
@@ -30,7 +31,7 @@ Widget drawer(context, bool connected) {
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Home(connected: connected);
+                  return Home(connected: connected, user: user,);
                 }));
               }),
           connected
@@ -48,6 +49,7 @@ Widget drawer(context, bool connected) {
                         MaterialPageRoute(builder: (context) {
                       return CalculateMyNeeds(
                         connected: connected,
+                          user: user
                       );
                     }));
                   },
@@ -66,6 +68,7 @@ Widget drawer(context, bool connected) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return PreparedMeals(
                   connected: connected,
+                    user: user
                 );
               }));
             },
@@ -81,7 +84,7 @@ Widget drawer(context, bool connected) {
             ),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Articles(connected: connected);
+                return Articles(connected: connected, user: user);
               }));
             },
           ),
@@ -100,6 +103,7 @@ Widget drawer(context, bool connected) {
                   MaterialPageRoute(builder: (context) {
                     return ContactUs(
                       connected: connected,
+                        user: user
                     );
                   }));
             },
@@ -129,6 +133,7 @@ Widget drawer(context, bool connected) {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
                 return Partnership(
                   connected: connected,
+                    user: user
                 );
               }));
             },

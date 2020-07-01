@@ -1,14 +1,19 @@
+import 'package:koolhealthymobile/models/User.dart';
+import 'package:http/http.dart' as http;
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
+import 'MessageSent.dart';
 
 
 class ContactUs extends StatefulWidget {
   final bool connected;
+  final User user;
 
   const ContactUs({
     Key key,
     @required this.connected,
+    @required this.user,
   }) : super(key: key);
   @override
   State<StatefulWidget> createState() {
@@ -20,17 +25,27 @@ class ContactUsState extends State<ContactUs>{
 
   final descriptionController = TextEditingController();
 
-  @override
-  void dispose() {
-    descriptionController.dispose();
-    super.dispose();
+  void addMessage() {
+    var url = "http://10.0.2.2/projetpfe/addMessage.php";
+    DateTime dateNow = DateTime.now();
+    String dateToSend = "${dateNow.year}-${dateNow.month}-${dateNow.day}";
+
+    http.post(url,body: {
+      'email': widget.user.username,
+      'nom' : widget.user.nom,
+      'date' : dateToSend,
+      'type' : "Contact",
+      'contenu' : descriptionController.text,
+    }
+    );
   }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context,widget.connected),
-      drawer: drawer(context,widget.connected),
+      appBar: myAppBar(context,widget.connected, widget.user),
+      drawer: drawer(context,widget.connected, widget.user),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -47,7 +62,7 @@ class ContactUsState extends State<ContactUs>{
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(20.0),
                 child: Text(
                   'Si vous avez des questions ou si vous voulez réclamer à une problème, n\'hésitez pas à nous laisser un message.',
                   style: TextStyle(
@@ -74,11 +89,22 @@ class ContactUsState extends State<ContactUs>{
                     bottom: 10.0,
                     left: MediaQuery.of(context).size.width * 0.55),
                 child: MaterialButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    addMessage();
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => MessageSent(
+                            connected: widget.connected,
+                            user: widget.user,
+                            ),
+                      ),
+                    );
+                  },
                   minWidth: 70.0,
                   height: 50,
                   child: Text(
-                    'Submit'.toUpperCase(),
+                    'Envoyer'.toUpperCase(),
                   ),
                   color: Theme.of(context).buttonColor,
                   textColor: Colors.white,

@@ -54,7 +54,7 @@ class _WelcomeState extends State<Welcome> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => Home(connected: false),
+                        builder: (context) => Home(connected: false, user: null),
                       ),
                     );
                   },

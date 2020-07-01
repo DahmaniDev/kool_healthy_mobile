@@ -3,7 +3,9 @@ import 'package:koolhealthymobile/pages/SignIn.dart';
 import './pages/Profile.dart';
 import 'package:flutter/material.dart';
 
-Widget myAppBar(context, bool connected) {
+import 'models/User.dart';
+
+Widget myAppBar(context, bool connected, User user) {
   return AppBar(
     iconTheme: new IconThemeData(color: Theme.of(context).buttonColor),
     elevation: 0,
@@ -14,7 +16,7 @@ Widget myAppBar(context, bool connected) {
               onPressed: () {
                 // Replace with sign in interface
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return ProfilePage();
+                  return ProfilePage(user: user);
                 }));
               },
               child: Stack(
@@ -41,12 +43,15 @@ Widget myAppBar(context, bool connected) {
                 overflow: Overflow.visible,
                 children: <Widget>[
                   Container(
-                    width: 35,
-                    child: Icon(
-                      Icons.lock_open,
-                      color: Theme.of(context).buttonColor,
-                      size: 35,
-                    ),
+                    width: 95,
+                    child: Text(
+                      'Connecter'.toUpperCase(),
+                      style: TextStyle(
+                        fontFamily: 'Poppins',
+                        color: Theme.of(context).buttonColor,
+                        fontSize: 15
+                      ),
+                    )
                   ),
                 ],
               ),

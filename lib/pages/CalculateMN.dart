@@ -1,5 +1,7 @@
+import 'package:koolhealthymobile/models/User.dart';
 import 'package:koolhealthymobile/pages/MenuPoulet.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
@@ -7,10 +9,12 @@ import 'package:pie_chart/pie_chart.dart';
 
 class CalculateMyNeeds extends StatefulWidget {
   final bool connected;
+  final User user;
 
   const CalculateMyNeeds({
     Key key,
     @required this.connected,
+    @required this.user,
   }) : super(key: key);
 
   @override
@@ -18,7 +22,6 @@ class CalculateMyNeeds extends StatefulWidget {
     return CalculateMyNeedsState();
   }
 }
-bool _connected = false;
 Map<String, double> needs = new Map();
 List<Needs> needsTab = <Needs>[];
 double _calories = 250;
@@ -36,30 +39,35 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
     Color(0XFFD57030),
   ];
 
+  Future<List> getNeeds() async{
+    final response = await http.post("http://10.0.2.2/projetpfe/getBesoins.php", body: {
+      "userID" : widget.user.id
+    });
+    var dataUser = json.decode(response.body);
+    if(dataUser.length == 0){
+      setState(() {
+        needsTab = _calculateMyNeeds(widget.user.sexe, widget.user.weight.toDouble(), widget.user.height.toDouble(), widget.user.age, widget.user.getActivity(), widget.user.goal);
+      });
+    }
+    return dataUser;
+  }
+
   @override
   void initState() {
     super.initState();
     needs.putIfAbsent("Calories", () => _calories);
-    needs.putIfAbsent("Protein", () => _protein);
-    needs.putIfAbsent("Fats", () => _fats);
-    needs.putIfAbsent("Carbs", () => _carbohydrates);
+    needs.putIfAbsent("Protéine", () => _protein);
+    needs.putIfAbsent("Graisses", () => _fats);
+    needs.putIfAbsent("Carbohydrates", () => _carbohydrates);
     needsTab = _calculateMyNeeds("Male", 72.0, 183.0, 23, "Active", "Bulk");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: myAppBar(context,widget.connected),
-        drawer: drawer(context, widget.connected),
-        body: _connected
-        ?SingleChildScrollView(
-          child: Container(
-            child: Text(
-              'Sign in and fill your informations in order to calculate your nutrition\'s needs'
-            ),
-          ),
-        )
-        :SingleChildScrollView(
+        appBar: myAppBar(context,widget.connected, widget.user),
+        drawer: drawer(context, widget.connected, widget.user),
+        body:SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 Padding(
@@ -76,9 +84,9 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                     )),
                 Padding(
                   padding: EdgeInsets.only(
-                      top: 10, right: MediaQuery.of(context).size.width * 0.6),
+                      top: 30, right: MediaQuery.of(context).size.width * 0.6, bottom: 10),
                   child: Text(
-                    "You need : ",
+                    "Vos besoins : ",
                     style: TextStyle(
                         color: Colors.black87,
                         fontFamily: "Bebas",
@@ -102,7 +110,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                               child: Padding(
                                 padding: EdgeInsets.all(10),
                                 child: FittedBox(
-                                  child: Text('${needsTab[index].amount} g'),
+                                  child: Text('${needsTab[index].amount}'),
                                 ),
                               )),
                           title: Text(
@@ -123,13 +131,13 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                   child: MaterialButton(
                     onPressed: () {
                       Navigator.of(context).push((MaterialPageRoute(
-                          builder: (context) => MenuPoulet(connected: widget.connected,)
+                          builder: (context) => MenuPoulet(connected: widget.connected, user: widget.user)
                       )));
                     },
                     minWidth: 70.0,
                     height: 50,
                     child: Text(
-                      'Prepare My Meal'.toUpperCase(),
+                      'Préparer Mon repas'.toUpperCase(),
                     ),
                     color: Colors.deepPurple,
                     textColor: Colors.white,
@@ -139,7 +147,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
             )));
   }
 
-List<Needs> _calculateMyNeeds(String sexe, double weight, double height, int age, String activityLevel, String goal){
+  List<Needs> _calculateMyNeeds(String sexe, double weight, double height, int age, String activityLevel, String goal){
     double bmr;
     double resultBMR;
     double resultCalories;
@@ -174,12 +182,12 @@ List<Needs> _calculateMyNeeds(String sexe, double weight, double height, int age
 
 
     Needs cal = new Needs(type: "Calories", amount: resultCalories);
-    Needs pro = new Needs(type: "Protein", amount: resultProtein);
-    Needs fat = new Needs(type: "Fats", amount: resultFats);
-    Needs car = new Needs(type: "Carbs", amount: resultCar);
+    Needs pro = new Needs(type: "Protéine", amount: resultProtein);
+    Needs fat = new Needs(type: "Graisses", amount: resultFats);
+    Needs car = new Needs(type: "Carbohydrates", amount: resultCar);
     final List<Needs> needsCalculated = [cal,pro,fat,car];
     return needsCalculated;
-}
+  }
 
 }
 

@@ -1,4 +1,5 @@
 
+import 'package:koolhealthymobile/models/User.dart';
 import 'package:koolhealthymobile/pages/MenuFruitsDeMer.dart';
 import 'package:koolhealthymobile/pages/MenuPoulet.dart';
 import 'package:koolhealthymobile/pages/MenuVegan.dart';
@@ -12,10 +13,12 @@ import '../drawer.dart';
 
 class PreparedMeals extends StatefulWidget {
   final bool connected;
+  final User user;
 
   const PreparedMeals({
     Key key,
     @required this.connected,
+    @required this.user,
   }) : super(key: key);
 
   @override
@@ -28,8 +31,8 @@ class _PreparedMealsState extends State<PreparedMeals> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar(context, widget.connected),
-      drawer: drawer(context, widget.connected),
+      appBar: myAppBar(context, widget.connected, widget.user),
+      drawer: drawer(context, widget.connected, widget.user),
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.fromLTRB(25, 30, 25, 25),
@@ -105,6 +108,7 @@ class _PreparedMealsState extends State<PreparedMeals> {
                         color: Color(0XFFad4d01),
                         image: Image.asset('assets/img/bolt.png', width: 20),
                         connected: widget.connected,
+                        user: widget.user,
                       ),
                       StatCard(
                         title: 'Fruits de mer',
@@ -112,6 +116,7 @@ class _PreparedMealsState extends State<PreparedMeals> {
                         color: Colors.deepPurple,
                         image: Image.asset('assets/img/fish.png', width: 20),
                         connected: widget.connected,
+                        user: widget.user,
                       ),
                       StatCard(
                         title: 'Végétarien',
@@ -119,6 +124,7 @@ class _PreparedMealsState extends State<PreparedMeals> {
                         color: Colors.green,
                         image: Image.asset('assets/img/sausage.png', width: 20),
                         connected: widget.connected,
+                        user: widget.user,
                       ),
                     ],
                   ),
@@ -140,6 +146,7 @@ class StatCard extends StatelessWidget {
   final Image image;
   final Color color;
   final bool connected;
+  final User user;
 
   const StatCard({
     Key key,
@@ -150,6 +157,7 @@ class StatCard extends StatelessWidget {
     @required this.image,
     @required this.color,
     @required this.connected,
+    @required this.user
   }) : super(key: key);
 
   @override
@@ -161,7 +169,7 @@ class StatCard extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => MenuPoulet(connected: connected),
+              builder: (context) => MenuPoulet(connected: connected, user: user,),
             ),
           );
         }
@@ -169,7 +177,7 @@ class StatCard extends StatelessWidget {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => MenuFruitsDeMer(connected: connected),
+                builder: (context) => MenuFruitsDeMer(connected: connected, user: user,),
               ),
             );
 
@@ -178,7 +186,7 @@ class StatCard extends StatelessWidget {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => MenuVegan(connected: connected),
+              builder: (context) => MenuVegan(connected: connected, user: user,),
             ),
           );
 

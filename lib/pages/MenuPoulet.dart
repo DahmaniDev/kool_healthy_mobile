@@ -1,3 +1,6 @@
+import 'package:koolhealthymobile/models/User.dart';
+
+import '../RepasInt.dart';
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
@@ -9,10 +12,12 @@ import 'PreparedMeals.dart';
 
 class MenuPoulet extends StatefulWidget {
   final bool connected;
+  final User user;
 
   const MenuPoulet({
     Key key,
     @required this.connected,
+    @required this.user,
   }) : super(key: key);
 
   @override
@@ -30,14 +35,14 @@ class _MenuPouletState extends State<MenuPoulet> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: myAppBar(context, widget.connected),
-      drawer: drawer(context, widget.connected),
+      appBar: myAppBar(context, widget.connected, widget.user),
+      drawer: drawer(context, widget.connected, widget.user),
       body: FutureBuilder<List>(
           future: getRepasPoulet(),
           builder: (context, snapshot) {
             if (snapshot.hasError) print(snapshot.error);
             return snapshot.hasData
-                ? new ItemList(list: snapshot.data)
+                ? new ItemList(list: snapshot.data, connected: widget.connected,user: widget.user,)
                 : new Center(child: CircularProgressIndicator());
           },
         ),
@@ -48,7 +53,7 @@ class _MenuPouletState extends State<MenuPoulet> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => PreparedMeals(connected: widget.connected),
+              builder: (context) => PreparedMeals(connected: widget.connected,user: widget.user,),
             ),
           );
         },
@@ -59,8 +64,10 @@ class _MenuPouletState extends State<MenuPoulet> {
 
 class ItemList extends StatelessWidget {
   final List list;
+  final bool connected;
+  final User user;
 
-  ItemList({this.list});
+  ItemList({this.list, this.connected, this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +87,25 @@ class ItemList extends StatelessWidget {
                   ),
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
                   subtitle: Text("Prix : ${list[i]['prix']} DT | Type : ${list[i]['type']}".toUpperCase()),
-
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => RepasInt(
+                          title: list[i]['nom'],
+                          connected: connected,
+                          user: user,
+                          type: list[i]['type'],
+                          image: Image(image: AssetImage('assets/img/chick${i+1}.png')),
+                          price: list[i]['prix'],
+                          calories: list[i]['cal_val'],
+                          protein: list[i]['prot_val'],
+                          fats: list[i]['fat_val'],
+                          carbs: list[i]['carb_val'],
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             );

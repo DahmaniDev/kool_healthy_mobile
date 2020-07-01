@@ -1,14 +1,21 @@
+import 'package:koolhealthymobile/models/User.dart';
+
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
 import '../ArticleInt.dart';
+import 'dart:convert';
+import 'dart:async';
+import 'package:http/http.dart' as http;
 
 class Articles extends StatefulWidget {
   final bool connected;
+  final User user;
 
   const Articles({
     Key key,
     @required this.connected,
+    @required this.user,
   }) : super(key: key);
 
   @override
@@ -16,12 +23,27 @@ class Articles extends StatefulWidget {
 }
 
 class _ArticlesState extends State<Articles> {
+
+  Future<List> getArticles() async {
+    var url = "http://10.0.2.2/projetpfe/getArticle.php";
+    http.Response response = await http.get(url);
+    var jsonData = jsonDecode(response.body);
+    return jsonData;
+  }
+
+  Future<List> getRecettes() async {
+    var url = "http://10.0.2.2/projetpfe/getRecette.php";
+    http.Response response = await http.get(url);
+    var jsonData = jsonDecode(response.body);
+    return jsonData;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: myAppBar(context, widget.connected),
-      drawer: drawer(context, widget.connected),
+      appBar: myAppBar(context, widget.connected, widget.user),
+      drawer: drawer(context, widget.connected, widget.user),
       body: SingleChildScrollView(
         child: Padding(
             padding: EdgeInsets.fromLTRB(25, 30, 25, 25),
@@ -39,43 +61,14 @@ class _ArticlesState extends State<Articles> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Container(
-                  height: 250,
-                  padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                  child: ListView(
-                    physics: ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      ArticleCard(
-                        title: 'Lose 5kg in JUST 2 weeks !',
-                        description: '* Eat lots of green vegetables or a fibre supplement. Fibre helps reduce \"bat wings\" and \"bingo arms\" by eliminating toxins.\n* Limit alcohol to four standard drinks a week. A 400kJ glass of wine replaces one snack.\n* Your body converts wheat to sugar faster than any other grain. So try and avoid bread and pasta, if you can.\n* All breakfasts on the diet can be swapped with other breakfasts, lunches with lunches and dinners with dinners.\n* One coffee per day is allowed. After that, drink green tea.\n* All breakfasts on the four week diet are interchangeable with other breakfasts, lunches with lunches and dinners with dinners.',
-                        connected: widget.connected,
-                        image: Image.asset(
-                          'assets/img/logo.png',
-                          width: 300,
-                        ),
-                      ),
-                      ArticleCard(
-                        title: 'HOW TO BULK !',
-                        description: '1. Count your calories (an additional 2,270 to 3,630 calories a week).\n2. Power up with protein (0.36 grams of protein per pound of body weight).\n3. Don\'t nix carbohydrates. \n4. Weigh the benefits of cardio.\n5. Tailor your workouts for muscle mass.',
-                        connected: widget.connected,
-                        image: Image.asset(
-                          'assets/img/logo.png',
-                          width: 300,
-                        ),
-                      ),
-                      ArticleCard(
-                        title: 'Healthy Meals for Women',
-                        description: '',
-                        connected: widget.connected,
-                        image: Image.asset(
-                          'assets/img/logo.png',
-                          width: 300,
-                        ),
-                      ),
-                    ],
-                  ),
+                FutureBuilder<List>(
+                  future: getArticles(),
+                  builder: (context, snapshot){
+                    if (snapshot.hasError) print(snapshot.error);
+                    return snapshot.hasData
+                        ? ArticleList(list: snapshot.data, connected: widget.connected, user: widget.user,)
+                        : new Center(child: CircularProgressIndicator());
+                  },
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 10),
@@ -89,44 +82,15 @@ class _ArticlesState extends State<Articles> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Container(
-                  height: 250,
-                  padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
-                  child: ListView(
-                    physics: ClampingScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    children: <Widget>[
-                      ArticleCard(
-                        title: 'Monday Motivations',
-                        description: 'Moooooooondaaaaaaaaaay',
-                        image: Image.asset(
-                          'assets/img/logo.png',
-                          width: 300,
-                        ),
-                        connected: widget.connected,
-                      ),
-                      ArticleCard(
-                        title: 'WAKE UP !',
-                        description: 'looooooooooooool',
-                        image: Image.asset(
-                          'assets/img/logo.png',
-                          width: 300,
-                        ),
-                        connected: widget.connected,
-                      ),
-                      ArticleCard(
-                        title: 'Be Better !',
-                        description: 'Noooooooooooooooooooooooo',
-                        image: Image.asset(
-                          'assets/img/logo.png',
-                          width: 300,
-                        ),
-                        connected: widget.connected,
-                      ),
-                    ],
-                  ),
-                )
+                FutureBuilder<List>(
+                  future: getRecettes(),
+                  builder: (context, snapshot){
+                    if (snapshot.hasError) print(snapshot.error);
+                    return snapshot.hasData
+                        ? ArticleList(list: snapshot.data, connected: widget.connected, user: widget.user,)
+                        : new Center(child: CircularProgressIndicator());
+                  },
+                ),
               ],
             )),
       ),
@@ -139,6 +103,7 @@ class ArticleCard extends StatelessWidget {
   final String description;
   final bool connected;
   final Image image;
+  final User user;
 
   const ArticleCard({
     Key key,
@@ -146,6 +111,7 @@ class ArticleCard extends StatelessWidget {
     @required this.description,
     @required this.image,
     @required this.connected,
+    @required this.user,
   }) : super(key: key);
 
   @override
@@ -158,6 +124,7 @@ class ArticleCard extends StatelessWidget {
             description: description,
             connected: connected,
             image: image,
+            user: user,
           );
         }));
       },
@@ -190,6 +157,41 @@ class ArticleCard extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ArticleList extends StatelessWidget{
+  final List list;
+  final bool connected;
+  final User user;
+
+  ArticleList({this.list, this.connected, this.user});
+
+  @override
+  Widget build(BuildContext context) {
+
+    return Container(
+      height: 250,
+      padding: EdgeInsets.fromLTRB(0, 15, 0, 15),
+      child: ListView.builder(
+          physics: ClampingScrollPhysics(),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount : list == null ? 0 : list.length,
+          itemBuilder: (context, i){
+            return ArticleCard(
+              title: list[i]['titre'],
+              description: list[i]['contenu'],
+              connected: connected,
+              user: user,
+              image: Image.asset(
+                'assets/img/logo.png',
+                width: 300,
+              ),
+            );
+          }
       ),
     );
   }
