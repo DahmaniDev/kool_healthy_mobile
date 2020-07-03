@@ -1,5 +1,4 @@
 import 'package:koolhealthymobile/models/User.dart';
-import 'package:koolhealthymobile/pages/MenuPoulet.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../appbar.dart';
