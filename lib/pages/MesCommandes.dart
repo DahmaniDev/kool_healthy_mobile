@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
-import 'package:koolhealthymobile/pages/Profile.dart';
 import '../models/User.dart';
 
 class MesCommandesPage extends StatefulWidget {
@@ -45,30 +44,18 @@ class MesCommandesPageState extends State<MesCommandesPage>
       appBar: AppBar(
         //iconTheme: new IconThemeData(color: Theme.of(context).buttonColor),
         elevation: 8,
-        backgroundColor: Colors.white,
-        actions: <Widget>[
-          FlatButton(
-            onPressed: () {
-              // Replace with sign in interface
-              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return ProfilePage(user: user);
-              }));
-            },
-            child: Stack(
-              overflow: Overflow.visible,
-              children: <Widget>[
-                Container(
-                  width: 35,
-                  child: Icon(
-                    Icons.arrow_back_ios,
-                    color: Theme.of(context).buttonColor,
-                    size: 35,
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+        backgroundColor: Colors.white70,
+        title: Text('Vos commandes', style: TextStyle(color: Theme.of(context).buttonColor)),
+        leading: Padding(padding: EdgeInsets.only(left: 20.0), child: Icon(Icons.assignment, color: Theme.of(context).buttonColor,)),
+
+        actions: <Widget>[],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.arrow_back_ios),
+        backgroundColor: Theme.of(context).buttonColor,
+        onPressed: () {
+          Navigator.pop(context);
+        },
       ),
       body: FutureBuilder<List>(
         future: getCommandes(),
@@ -89,6 +76,7 @@ class MesCommandesPageState extends State<MesCommandesPage>
   }
 }
 
+// ignore: must_be_immutable
 class ItemList extends StatelessWidget {
   final List list;
   final User user;
@@ -99,8 +87,7 @@ class ItemList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      child: new ListView.builder(
+    return ListView.builder(
           shrinkWrap: true,
           addRepaintBoundaries: true,
           physics: AlwaysScrollableScrollPhysics(),
@@ -127,9 +114,7 @@ class ItemList extends StatelessWidget {
                       radius: 30,
                       child: Padding(
                         padding: EdgeInsets.all(5),
-                        child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: (_status == 0)
+                        child: (_status == 0)
                                 ? Image(image: AssetImage('assets/preparing.png'))
                                 : (_status == 1)
                                     ? Image(
@@ -140,7 +125,7 @@ class ItemList extends StatelessWidget {
                                                 'assets/deliveryGUY.png'))
                                         : Image(
                                             image: AssetImage(
-                                                'assets/done.png'))),
+                                                'assets/done.png')),
                       )),
                   trailing: Padding(
                       padding: EdgeInsets.all(8),
@@ -150,10 +135,8 @@ class ItemList extends StatelessWidget {
                         decoration: BoxDecoration(
                             border: Border.all(color: Colors.deepOrange, width: 1)
                         ),
-                        child: FittedBox(
-                            fit: BoxFit.fitWidth,
-                            child: Text('Prix : ${list[i]['prix_comm']} DT' ??
-                                "Prix : --- DT")),
+                        child: Text('Prix : ${list[i]['prix_comm']} DT' ??
+                                "Prix : --- DT"),
                       )),
                   subtitle: Text(
                         "Date : ${list[i]['date_livraison']} | Temps : ${list[i]['temps_livraison']}" ??
@@ -174,8 +157,7 @@ class ItemList extends StatelessWidget {
                 ),
               ),
             );
-          }),
-    );
+          });
   }
 
   Container _buildBottomSheet(BuildContext context, int idC, String adresse, String date, String time, int idR, int idT, String status, String price){

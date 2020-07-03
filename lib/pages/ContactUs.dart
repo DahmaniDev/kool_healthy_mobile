@@ -91,7 +91,7 @@ class ContactUsState extends State<ContactUs>{
                 child: MaterialButton(
                   onPressed: () {
                     addMessage();
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => MessageSent(

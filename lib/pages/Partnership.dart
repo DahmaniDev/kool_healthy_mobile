@@ -134,7 +134,7 @@ class PartnershipState extends State<Partnership>{
                 child: MaterialButton(
                   onPressed: () {
                     addMessage();
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => MessageSent(

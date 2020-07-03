@@ -166,7 +166,7 @@ class StatCard extends StatelessWidget {
       onTap: (){
         print('$type pressed');
         if(type == 'Repas à base poulet'){
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => MenuPoulet(connected: connected, user: user,),
@@ -174,7 +174,7 @@ class StatCard extends StatelessWidget {
           );
         }
         if(type == 'Repas à base fruits de mer'){
-            Navigator.pushReplacement(
+            Navigator.push(
               context,
               MaterialPageRoute(
                 builder: (context) => MenuFruitsDeMer(connected: connected, user: user,),
@@ -183,7 +183,7 @@ class StatCard extends StatelessWidget {
 
         }
         if(type == 'Repas végétariens'){
-          Navigator.pushReplacement(
+          Navigator.push(
             context,
             MaterialPageRoute(
               builder: (context) => MenuVegan(connected: connected, user: user,),
@@ -217,15 +217,6 @@ class StatCard extends StatelessWidget {
                     fontSize: 14,
                   ),
                 ),
-                /*achieved < total
-                    ? Image.asset(
-                  'assets/img/down_orange.png',
-                  width: 20,
-                )
-                    : Image.asset(
-                  'assets/img/up_red.png',
-                  width: 20,
-                ),*/
               ],
             ),
             Padding(

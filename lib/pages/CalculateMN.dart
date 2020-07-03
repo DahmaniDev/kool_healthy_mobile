@@ -129,11 +129,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                       bottom: 10.0,
                       left: MediaQuery.of(context).size.width * 0.45),
                   child: MaterialButton(
-                    onPressed: () {
-                      Navigator.of(context).push((MaterialPageRoute(
-                          builder: (context) => MenuPoulet(connected: widget.connected, user: widget.user)
-                      )));
-                    },
+                    onPressed: () {},
                     minWidth: 70.0,
                     height: 50,
                     child: Text(

@@ -650,7 +650,7 @@ class ProfilePageState extends State<ProfilePage>
                         .of(context)
                         .buttonColor,
                     onPressed: () {
-                      Navigator.pushReplacement(
+                      Navigator.push(
                           context,
                           MaterialPageRoute(
                           builder: (context) => MesCommandesPage(user: widget.user),

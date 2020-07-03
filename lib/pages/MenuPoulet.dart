@@ -8,7 +8,6 @@ import 'dart:convert';
 import 'dart:async';
 import 'package:http/http.dart' as http;
 
-import 'PreparedMeals.dart';
 
 class MenuPoulet extends StatefulWidget {
   final bool connected;
@@ -50,12 +49,7 @@ class _MenuPouletState extends State<MenuPoulet> {
         child: Icon(Icons.arrow_back_ios),
         backgroundColor: Theme.of(context).buttonColor,
         onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PreparedMeals(connected: widget.connected,user: widget.user,),
-            ),
-          );
+          Navigator.pop(context);
         },
       ),
     );
@@ -88,7 +82,7 @@ class ItemList extends StatelessWidget {
                   trailing: Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
                   subtitle: Text("Prix : ${list[i]['prix']} DT | Type : ${list[i]['type']}".toUpperCase()),
                   onTap: () {
-                    Navigator.pushReplacement(
+                    Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) => RepasInt(

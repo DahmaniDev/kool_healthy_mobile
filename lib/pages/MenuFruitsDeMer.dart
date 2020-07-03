@@ -1,6 +1,5 @@
 import 'package:koolhealthymobile/RepasInt.dart';
 import 'package:koolhealthymobile/models/User.dart';
-import 'package:koolhealthymobile/pages/PreparedMeals.dart';
 
 import '../appbar.dart';
 import 'package:flutter/material.dart';
@@ -49,12 +48,7 @@ class _MenuFruitsDeMerState extends State<MenuFruitsDeMer> {
         child: Icon(Icons.arrow_back_ios),
         backgroundColor: Theme.of(context).buttonColor,
         onPressed: () {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PreparedMeals(connected: widget.connected,user: widget.user),
-            ),
-          );
+          Navigator.pop(context);
         },
       ),
     );
@@ -87,7 +81,7 @@ class ItemList extends StatelessWidget {
                 trailing: Icon(Icons.arrow_forward_ios, color: Colors.deepPurple),
                 subtitle: Text("Prix : ${list[i]['prix']} DT | Type : ${list[i]['type']}".toUpperCase()),
                 onTap: () {
-                  Navigator.pushReplacement(
+                  Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) => RepasInt(
