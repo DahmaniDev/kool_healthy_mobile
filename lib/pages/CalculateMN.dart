@@ -1,6 +1,4 @@
 import 'package:koolhealthymobile/models/User.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
@@ -23,42 +21,23 @@ class CalculateMyNeeds extends StatefulWidget {
 }
 Map<String, double> needs = new Map();
 List<Needs> needsTab = <Needs>[];
-double _calories = 250;
-double _protein = 150;
-double _fats = 50;
-double _carbohydrates = 100;
-
 
 
 class CalculateMyNeedsState extends State<CalculateMyNeeds> {
   List<Color> colorList = [
-    Color(0XFF8B281F),
-    Color(0XFF9BA747),
-    Color(0XFFF29D4B),
-    Color(0XFFD57030),
+    Color(0XFF6975A6),
+    Color(0XFFF28A30),
+    Color(0XFFF05837),
   ];
 
-  Future<List> getNeeds() async{
-    final response = await http.post("http://10.0.2.2/projetpfe/getBesoins.php", body: {
-      "userID" : widget.user.id
-    });
-    var dataUser = json.decode(response.body);
-    if(dataUser.length == 0){
-      setState(() {
-        needsTab = _calculateMyNeeds(widget.user.sexe, widget.user.weight.toDouble(), widget.user.height.toDouble(), widget.user.age, widget.user.getActivity(), widget.user.goal);
-      });
-    }
-    return dataUser;
-  }
 
   @override
   void initState() {
     super.initState();
-    needs.putIfAbsent("Calories", () => _calories);
-    needs.putIfAbsent("Protéine", () => _protein);
-    needs.putIfAbsent("Graisses", () => _fats);
-    needs.putIfAbsent("Carbohydrates", () => _carbohydrates);
-    needsTab = _calculateMyNeeds("Male", 72.0, 183.0, 23, "Active", "Bulk");
+    needsTab = _calculateMyNeeds(widget.user.sexe, widget.user.weight.toDouble(), widget.user.height.toDouble(), widget.user.age, widget.user.getActivity(), widget.user.goal);
+    needs.putIfAbsent("Protéine", () => needsTab[1].amount);
+    needs.putIfAbsent("Graisses", () => needsTab[2].amount);
+    needs.putIfAbsent("Carbohydrates", () => needsTab[3].amount);
   }
 
   @override
@@ -95,7 +74,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                 ),
                 //SHOW NEEDS
                 Container(
-                  width: 300,
+                  width: 350,
                   child: ListView.builder(
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
@@ -106,12 +85,14 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                         child: ListTile(
                           leading: CircleAvatar(
                               radius: 30,
+                              backgroundColor: Colors.lightGreenAccent,
                               child: Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: EdgeInsets.all(5),
                                 child: FittedBox(
-                                  child: Text('${needsTab[index].amount}'),
+                                  child: Text('${needsTab[index].amount.toStringAsFixed(2)}', style: TextStyle(color: Colors.black),),
                                 ),
-                              )),
+                              )
+                          ),
                           title: Text(
                             needsTab[index].type,
                             style: Theme.of(context).textTheme.title,
@@ -125,7 +106,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                 Padding(
                   padding: EdgeInsets.only(
                       top: 20.0,
-                      bottom: 10.0,
+                      bottom: 30.0,
                       left: MediaQuery.of(context).size.width * 0.45),
                   child: MaterialButton(
                     onPressed: () {},
@@ -134,7 +115,7 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                     child: Text(
                       'Préparer Mon repas'.toUpperCase(),
                     ),
-                    color: Colors.deepPurple,
+                    color: Theme.of(context).buttonColor,
                     textColor: Colors.white,
                   ),
                 )
@@ -149,37 +130,48 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
     double resultProtein;
     double resultFats;
     double resultCar;
-    if(sexe == "Male"){
+    if(sexe == "Homme"){
       bmr = 10 * weight + 6.25 * height - 5 * age + 5;
     }
-    if(sexe == "Female"){
+    if(sexe == "Femme"){
       bmr = 10 * weight + 6.25 * height - 5 * age - 161;
     }
     switch(activityLevel){
-      case "Non Active" : resultBMR = 1.2 * bmr;
+      case "Pas actif" : resultBMR = 1.2 * bmr;
       break;
-      case "Little Active" : resultBMR = 1.4 * bmr;
+      case "Peu actif" : resultBMR = 1.4 * bmr;
       break;
-      case "Active" : resultBMR = 1.6 * bmr;
+      case "Actif" : resultBMR = 1.6 * bmr;
       break;
-      case "Super Active" : resultBMR = 1.9 * bmr;
+      case "Super Actif" : resultBMR = 1.9 * bmr;
       break;
     }
-    resultProtein = (weight * 2);
     switch(goal){
-      case "Lose Weight" : resultFats = 0.7 * weight; resultCalories = resultBMR - 0.15 * resultBMR; resultCar = ((resultProtein * 4) + (resultFats * 9) - resultCalories)/4;
-      break;
-      case "Maintain Weight" : resultFats = 0.7 * weight; resultCalories = resultBMR; resultCar = ((resultProtein * 4) + (resultFats * 9) - resultCalories);
-      break;
-      case "Bulk" : resultFats = 0.7 * weight; resultCalories = resultBMR + 0.15 * resultBMR; resultCar = ((resultProtein * 4) + (resultFats * 9) - resultCalories)*4;
-      break;
+      case "Prendre du poids" :
+        resultCalories = resultBMR + (0.15 * resultBMR);
+        resultFats= (0.3 * resultCalories)/9 ;
+        resultProtein=(resultCalories * 0.3)/4;
+        resultCar = (resultCalories * 0.4)/4;
+        break;
+      case "Maintenir le poids" :
+        resultCalories = resultBMR;
+        resultFats= (0.2 * resultCalories)/9 ;
+        resultProtein=(resultCalories * 0.4)/4;
+        resultCar = (resultCalories * 0.4)/4;
+        break;
+      case "Perdre du poids" :
+        resultCalories = resultBMR - (0.15 * resultBMR);
+        resultFats= (0.2 * resultCalories)/9 ;
+        resultProtein=(resultCalories * 0.45)/4;
+        resultCar = (resultCalories * 0.35)/4;
+        break;
     }
 
 
-    Needs cal = new Needs(type: "Calories", amount: resultCalories);
-    Needs pro = new Needs(type: "Protéine", amount: resultProtein);
-    Needs fat = new Needs(type: "Graisses", amount: resultFats);
-    Needs car = new Needs(type: "Carbohydrates", amount: resultCar);
+    Needs cal = new Needs(type: "Calories (Kcal)", amount: resultCalories);
+    Needs pro = new Needs(type: "Protéine (g)", amount: resultProtein);
+    Needs fat = new Needs(type: "Graisses (g)", amount: resultFats);
+    Needs car = new Needs(type: "Carbohydrates (Kcal)", amount: resultCar);
     final List<Needs> needsCalculated = [cal,pro,fat,car];
     return needsCalculated;
   }
