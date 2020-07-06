@@ -31,7 +31,10 @@ Widget drawer(context, bool connected, User user) {
               ),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
-                  return Home(connected: connected, user: user,);
+                  return Home(
+                    connected: connected,
+                    user: user,
+                  );
                 }));
               }),
           connected
@@ -47,10 +50,7 @@ Widget drawer(context, bool connected, User user) {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (context) {
-                      return CalculateMyNeeds(
-                        connected: connected,
-                          user: user
-                      );
+                      return CalculateMyNeeds(connected: connected, user: user);
                     }));
                   },
                 )
@@ -66,10 +66,7 @@ Widget drawer(context, bool connected, User user) {
             ),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return PreparedMeals(
-                  connected: connected,
-                    user: user
-                );
+                return PreparedMeals(connected: connected, user: user);
               }));
             },
           ),
@@ -90,24 +87,21 @@ Widget drawer(context, bool connected, User user) {
           ),
           connected
               ? ListTile(
-            leading: Icon(
-              Icons.contact_mail,
-              color: Theme.of(context).buttonColor,
-            ),
-            title: Text(
-              'Contact',
-              style: TextStyle(color: Theme.of(context).buttonColor),
-            ),
-            onTap: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) {
-                    return ContactUs(
-                      connected: connected,
-                        user: user
-                    );
-                  }));
-            },
-          )
+                  leading: Icon(
+                    Icons.contact_mail,
+                    color: Theme.of(context).buttonColor,
+                  ),
+                  title: Text(
+                    'Contact',
+                    style: TextStyle(color: Theme.of(context).buttonColor),
+                  ),
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) {
+                      return ContactUs(connected: connected, user: user);
+                    }));
+                  },
+                )
               : Container(),
           connected
               ? Padding(
@@ -131,10 +125,7 @@ Widget drawer(context, bool connected, User user) {
             ),
             onTap: () {
               Navigator.push(context, MaterialPageRoute(builder: (context) {
-                return Partnership(
-                  connected: connected,
-                    user: user
-                );
+                return Partnership(connected: connected, user: user);
               }));
             },
           ),

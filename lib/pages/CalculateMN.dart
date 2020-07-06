@@ -1,4 +1,5 @@
 import 'package:koolhealthymobile/models/User.dart';
+import 'package:koolhealthymobile/pages/PrepareMyMeal.dart';
 import '../appbar.dart';
 import 'package:flutter/material.dart';
 import '../drawer.dart';
@@ -109,7 +110,17 @@ class CalculateMyNeedsState extends State<CalculateMyNeeds> {
                       bottom: 30.0,
                       left: MediaQuery.of(context).size.width * 0.45),
                   child: MaterialButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => PrepareMyMeal(
+                                connected: widget.connected,
+                                user: widget.user,
+                                calories: needsTab[0].amount,
+                              )
+                          ));
+                    },
                     minWidth: 70.0,
                     height: 50,
                     child: Text(

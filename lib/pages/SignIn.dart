@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'package:koolhealthymobile/models/Traiteur.dart';
 import 'package:koolhealthymobile/models/User.dart';
+import 'package:koolhealthymobile/pages/HomeTraiteur.dart';
 import 'package:koolhealthymobile/pages/Register.dart';
 import 'package:http/http.dart' as http;
 import 'Home.dart';
@@ -57,14 +59,14 @@ class _SignInState extends State<SignIn> {
         error=true;
       });
     }else{
-      /*Navigator.pushReplacement(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => Home(
-              connected: true,
-              user: new User(int.parse(dataUser[0]['id']),dataUser[0]['name'],dataUser[0]['username'],dataUser[0]['password'],dataUser[0]['sexe'],int.parse(dataUser[0]['age']),int.parse(dataUser[0]['height']),int.parse(dataUser[0]['weight']),dataUser[0]['goal'],dataUser[0]['activity_level'])),
+          builder: (context) => HomeTraiteur(
+            traiteur: new Traiteur(int.parse(dataTraiteur[0]['id']), dataTraiteur[0]['nom'], dataTraiteur[0]['email'], dataTraiteur[0]['telephone'], dataTraiteur[0]['login'], dataTraiteur[0]['password']),
+          )
         ),
-      );*/
+      );
       print(dataTraiteur);
     }
 

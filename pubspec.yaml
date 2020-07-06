@@ -61,8 +61,10 @@ flutter:
     - assets/cooking.png
     - assets/deliveryGUY.png
     - assets/done.png
+    - assets/oops.png
     - assets/preparing.png
     - assets/img/MaintenirLePoids.png
+    - assets/img/download.png
     - assets/img/PerdreDuPoids.png
     - assets/img/PrendreDuPoids.png
     - assets/img/chick1.png

@@ -30,6 +30,7 @@ class _MenuFruitsDeMerState extends State<MenuFruitsDeMer> {
     return jsonData;
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -85,6 +86,8 @@ class ItemList extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) => RepasInt(
+                        id: int.parse(list[i]['id']),
+                        idTr: int.parse(list[i]['id_traiteur']),
                         title: list[i]['nom'],
                         connected: connected,
                         user: user,

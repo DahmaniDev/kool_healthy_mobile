@@ -86,6 +86,8 @@ class ItemList extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => RepasInt(
+                          id: int.parse(list[i]['id']),
+                          idTr: int.parse(list[i]['id_traiteur']),
                           title: list[i]['nom'],
                           connected: connected,
                           user: user,

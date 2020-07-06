@@ -58,7 +58,7 @@ class _RegisterState extends State<Register> {
       );
 
 
-    return dataUser;
+    //return dataUser;
   }
 
   @override
@@ -141,7 +141,7 @@ class _RegisterState extends State<Register> {
                       icon: Icon(Icons.lock),
                     ),
                     controller: passwordVerC,
-                    obscureText: false,
+                    obscureText: true,
                   ),
                 ),
                 Padding(

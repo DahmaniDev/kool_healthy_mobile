@@ -1,8 +1,13 @@
 import 'appbar.dart';
 import 'drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+import 'models/User.dart';
 
 class RepasInt extends StatefulWidget {
+  final int id;
+  final int idTr;
   final String title;
   final String type;
   final String price;
@@ -12,10 +17,12 @@ class RepasInt extends StatefulWidget {
   final String carbs;
   final Image image;
   final bool connected;
-  final user;
+  final User user;
 
   const RepasInt({
     Key key,
+    @required this.id,
+    @required this.idTr,
     @required this.title,
     @required this.type,
     @required this.image,
@@ -37,6 +44,25 @@ class _RepasIntState extends State<RepasInt> {
   TextEditingController dateC = new TextEditingController();
   TextEditingController tempsC = new TextEditingController();
   bool _commander = false;
+
+  void commander(){
+    var url = "http://10.0.2.2/projetpfe/commander.php";
+    DateTime dateNow = DateTime.now();
+    String dateToSend = "${dateNow.year}-${dateNow.month}-${dateNow.day}";
+
+    http.post(url,body: {
+      'idRepas' : widget.id.toString(),
+      'dateComm' : dateToSend,
+      'adresse' : adresseC.text,
+      'prixComm' : widget.price.toString(),
+      'status' : 'En attente',
+      'idUser' : widget.user.id.toString(),
+      'idTraiteur' : widget.idTr.toString(),
+      'dateLivr' : dateC.text,
+      'tempsLivr' : tempsC.text.toString(),
+    }
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -78,7 +104,7 @@ class _RepasIntState extends State<RepasInt> {
                 padding: EdgeInsets.only(
                     left: 10.0, right: 8.0, top: 20, bottom: 20.0),
                 child: Text(
-                  'Prix : ${widget.price} DT\nType: ${widget.type}\nValeurs nutritifs : \n Calories : ${widget.calories} Kcal\n Protéine : ${widget.protein} g\n Graisses : ${widget.fats} g\n Carbohydrates : ${widget.carbs} Kcal',
+                  'Prix : ${widget.price} DT\nType: ${widget.type}\nValeurs nutritifs : \nCalories : ${widget.calories} Kcal\nProtéine : ${widget.protein} g\nGraisses : ${widget.fats} g\nCarbohydrates : ${widget.carbs} Kcal',
                   style: TextStyle(color: Colors.black87, fontSize: 18.0),
                   textAlign: TextAlign.left,
                 ),
@@ -184,7 +210,7 @@ class _RepasIntState extends State<RepasInt> {
                                 initialTime: TimeOfDay(hour: now.hour, minute: now.minute)
                               ).then((TimeOfDay value){
                                 if(value != null){
-                                  tempsC.text = "${value.format(context)}";
+                                  tempsC.text = value.format(context);
                                 }
                               });
                             },
@@ -196,7 +222,10 @@ class _RepasIntState extends State<RepasInt> {
                           height: 85,
                           child: RaisedButton.icon(
                             elevation: 10,
-                            onPressed: () {}, //commander
+                            onPressed: () {
+                              commander();
+                              print(tempsC.text);
+                            }, //commander
                             icon: Icon(Icons.verified_user, color: Colors.white,),
                             label: Text('Confirmer', style: TextStyle(color: Colors.white),),
                             color: Theme.of(context).buttonColor,
