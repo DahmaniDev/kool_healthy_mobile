@@ -1,6 +1,6 @@
 # koolhealthymobile
 
-Kool Healthy Mobile Plateform.
+Kool Healthy Mobile Application using Flutter.
 
 ## Getting Started
 
